@@ -1,13 +1,12 @@
-import { ThemeProvider } from "@emotion/react";
 import AppRouter from "./routes";
-import { themeLight } from "./shared/themes/light";
+import { AppThemeProvider } from "./shared/contexts/ThemeContext";
 
 export default function App() {
   return (
     <>
-      <ThemeProvider theme={themeLight}>
+      <AppThemeProvider>
         <AppRouter />
-      </ThemeProvider>
+      </AppThemeProvider>
     </>
   );
 }
