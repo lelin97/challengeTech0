@@ -8,15 +8,25 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { ReactNode } from "react";
+import { useAppDrawerContext } from "../../contexts";
 
 export const MenuLateral = ({ children }: { children: ReactNode }) => {
   const theme = useTheme();
+  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const { isDrawerOpen, toggleDrawerOpen } = useAppDrawerContext();
+
   return (
     <>
-      <Drawer variant="permanent">
+      <Drawer
+        open={isDrawerOpen}
+        onClose={toggleDrawerOpen}
+        variant={smDown ? "temporary" : "permanent"}
+      >
         <Box
           width={theme.spacing(28)}
           height={"100%"}
@@ -53,7 +63,7 @@ export const MenuLateral = ({ children }: { children: ReactNode }) => {
         </Box>
       </Drawer>
 
-      <Box height={"100vh"} marginLeft={theme.spacing(28)}>
+      <Box height={"100vh"} marginLeft={smDown ? 0 : theme.spacing(28)}>
         {children}
       </Box>
     </>
