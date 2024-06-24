@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "../shared/components/layout";
-import Login from "../pages/login";
-import Home from "../pages/home";
+import AutenticadoLayout from "../pages/authenticated";
 import { Button } from "@mui/material";
 
 export const router = createBrowserRouter([
@@ -9,20 +8,13 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
+        element: <AutenticadoLayout />,
         path: "/",
-        element: <Home />,
       },
       {
-        path: "/",
+        element: <Button>Boletos</Button>,
+        path: "/autenticado/boletos",
       },
     ],
-  },
-  {
-    path: "/login",
-    element: (
-      <Button variant="contained" color="primary">
-        teste
-      </Button>
-    ),
   },
 ]);
