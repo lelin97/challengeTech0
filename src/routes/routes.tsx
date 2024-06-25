@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "../shared/components/layout";
 import AutenticadoLayout from "../pages/authenticated";
-import { Button } from "@mui/material";
+import ListPayCheck from "../pages/PayCheck/list";
 
 export const router = createBrowserRouter([
   {
@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
         path: "/",
       },
       {
-        element: <Button>Boletos</Button>,
+        element: <ListPayCheck />,
         path: "/autenticado/boletos",
       },
     ],
