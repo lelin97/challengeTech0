@@ -17,9 +17,14 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
+    "ag-grid-react": "^31.3.2",
+    "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "6"
+    "react-router-dom": "6",
+    "zod": "^3.23.8",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

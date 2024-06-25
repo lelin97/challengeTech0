@@ -15,5 +15,13 @@ export const LightTheme = createTheme({
       light: cyan[500],
       contrastText: "#ffffff",
     },
+ },
+  components: {
+    MuiTextField: {
+      defaultProps: {
+        size: "small",
+        fullWidth: true,
+      },
+    },
   },
 });
