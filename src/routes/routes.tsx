@@ -10,10 +10,12 @@ export const router = createBrowserRouter([
       {
         element: <AutenticadoLayout />,
         path: "/",
-      },
-      {
-        element: <ListPayCheck />,
-        path: "/boletos",
+        children: [
+          {
+            element: <ListPayCheck />,
+            path: "/boletos",
+          },
+        ],
       },
     ],
   },
