@@ -27,12 +27,6 @@ Possui botões para editar ou excluir o boleto.
 Edição de boleto:
 Permite editar as informações de um boleto selecionado.
 
-Tecnologias utilizadas:
-React.js
-Zustand
-Zod
-MUI
-
 Como usar:
 
 Clone este repositório para o seu computador.
