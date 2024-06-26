@@ -6,31 +6,45 @@ import {
   faPlus,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { Box, Paper } from "@mui/material";
-import NewPayCheck from "../new";
-import { useState } from "react";
-
-//statesList
-const teste = [
-  {
-    id: 1,
-    desc: "lelo",
-  },
-  {
-    id: 2,
-    desc: "lelo",
-  },
-];
+import { Box } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import listPayCheckEndpoint, {
+  RetornoPayCheck,
+} from "../../../services/Endpoints/PayChecks/list";
+import NewPayCheck from "../new/index";
 
 export default function ListPayCheck() {
-  const [stateList, setStateList] = useState({
+  const [stateList, setStateList] = useState<{
+    openPopUp: boolean;
+    boletosCadastrados: RetornoPayCheck;
+  }>({
     openPopUp: false,
+    boletosCadastrados: [],
   });
+
+  const payCheckSelected = useRef<any>(null);
+
+  async function listAllPayChecks() {
+    listPayCheckEndpoint({
+      funcSucesso: (data) => {
+        setStateList((prev) => ({
+          ...prev,
+          boletosCadastrados: data,
+        }));
+      },
+    });
+  }
+
+  useEffect(() => {
+    listAllPayChecks();
+  }, []);
 
   return (
     <>
       <DataGrid
-        rowData={teste}
+        rowData={stateList.boletosCadastrados}
+        rowSelection="multiple"
+        rowMultiSelectWithClick={true}
         toolbar={[
           () => {
             return (
@@ -51,20 +65,41 @@ export default function ListPayCheck() {
         ]}
         columnDefs={[
           {
-            headerName: "id",
-            field: "id",
-          },
-          {
-            headerName: "desc",
-            field: "desc",
+            checkboxSelection: true,
+            headerName: "Descrição",
+            field: "descricao",
           },
           {
             headerName: "actions",
-            cellRenderer: () => {
+            cellRenderer: (e: any) => {
+              const dados = e.data;
               return (
                 <Box display={"flex"} gap={2} flexWrap={"wrap"}>
-                  <FontAwesomeIcon color="blue" icon={faInfo} />
-                  <FontAwesomeIcon color="orange" icon={faPencil} />
+                  <FontAwesomeIcon
+                    color="blue"
+                    onClick={(e) => {
+                      // console.log(a);
+                    }}
+                    icon={faInfo}
+                  />
+                  <FontAwesomeIcon
+                    onClick={() => {
+                      setStateList((prev) => ({
+                        ...prev,
+                        openPopUp: true,
+                      }));
+                      payCheckSelected.current?.editarPayCheck({
+                        id_boleto: dados.id_boleto,
+                        descricao: dados.descricao,
+                        dt_venc: new Date(dados.data_vencimento),
+                        valor: dados.valor,
+                        valor_multa: dados.valor_multa,
+                        juros: dados.juros,
+                      });
+                    }}
+                    color="orange"
+                    icon={faPencil}
+                  />
                   <FontAwesomeIcon color="red" icon={faTrash} />
                 </Box>
               );
@@ -81,6 +116,8 @@ export default function ListPayCheck() {
             openPopUp: false,
           }));
         }}
+        listAllPayChecks={listAllPayChecks}
+        ref={payCheckSelected}
       />
     </>
   );

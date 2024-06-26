@@ -8,45 +8,100 @@ import {
 import { Controller, Form, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@mui/x-date-pickers";
+import registerPayCheckEndpoint from "../../../services/Endpoints/PayChecks/register";
+import { usarAlerta } from "../../../shared/contexts/usarAlerta";
+import { forwardRef, useImperativeHandle } from "react";
 
 const defaultValues: DefaultPayCheckInput = {
+  id_boleto: "",
   descricao: "",
   dt_venc: new Date(),
+  valor: "",
   valor_multa: "",
   juros: "",
 };
 
-export default function NewPayCheck({
-  open,
-  closed,
-}: {
+interface INewCheckProps {
   open: boolean;
   closed: () => void;
-}) {
+  listAllPayChecks: () => void;
+}
+export type RefNewPayCheck = {
+  editarPayCheck: (dadosPayCheck: {
+    id_boleto: string | null;
+    descricao: string;
+    dt_venc: Date;
+    valor: string;
+    valor_multa: string;
+    juros: string;
+  }) => void;
+};
+
+const cadastroPayCheck = forwardRef(function NewPayCheck(
+  props: INewCheckProps,
+  ref: React.ForwardedRef<RefNewPayCheck>
+) {
+  const { abrirAlertaSucesso } = usarAlerta();
   const { control, reset } = useForm({
     mode: "onChange",
     defaultValues: defaultValues,
     resolver: zodResolver(validationRegisterPayCheck),
   });
 
+  const edicao = !!defaultValues.id_boleto;
+
+  console.log(edicao);
+
   function clearFields() {
     reset({
       descricao: "",
       dt_venc: new Date(),
+      valor: "",
       valor_multa: "",
       juros: "",
     });
   }
 
   async function createPayCheck(data: any) {
-    console.log("My Data:", data);
+    registerPayCheckEndpoint({
+      body: data,
+      funcSucess: (resultado) => {
+        clearFields();
+        props.closed();
+        abrirAlertaSucesso("Boleto cadastrado com sucesso.");
+        props.listAllPayChecks();
+        console.log("Deu sucesso.", resultado);
+      },
+    });
   }
+
+  useImperativeHandle(ref, () => {
+    return {
+      editarPayCheck: (dadosPayCheck: {
+        id_boleto: string | null;
+        descricao: string;
+        dt_venc: Date;
+        valor: string;
+        valor_multa: string;
+        juros: string;
+      }) => {
+        reset({
+          id_boleto: dadosPayCheck.id_boleto,
+          descricao: dadosPayCheck.descricao,
+          dt_venc: dadosPayCheck.dt_venc,
+          valor: dadosPayCheck.valor,
+          valor_multa: dadosPayCheck.valor_multa,
+          juros: dadosPayCheck.juros,
+        });
+      },
+    };
+  });
 
   return (
     <Popup
-      open={open}
+      open={props.open}
       onClose={() => {
-        closed();
+        props.closed();
         clearFields();
       }}
       title="New Pay Check"
@@ -55,11 +110,11 @@ export default function NewPayCheck({
       <Form<DefaultPayCheckInput, DefaultPayCheckOutput>
         control={control as any}
         onSubmit={({ data }) => {
-          console.log(data);
           createPayCheck(data);
         }}
       >
         <Grid container spacing={1}>
+          {/* Descrição */}
           <Grid item xs={12} sm={6}>
             <Controller
               name="descricao"
@@ -79,6 +134,8 @@ export default function NewPayCheck({
               )}
             />
           </Grid>
+
+          {/* Data Vencimento */}
           <Grid item xs={12} sm={6}>
             <Controller
               name="dt_venc"
@@ -96,6 +153,29 @@ export default function NewPayCheck({
               )}
             />
           </Grid>
+
+          {/* Valor */}
+          <Grid item xs={12} sm={6}>
+            <Controller
+              name="valor"
+              control={control}
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  label="Valor"
+                  error={!!error}
+                  helperText={error?.message}
+                  required={true}
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
+            />
+          </Grid>
+
+          {/* Valor Multa */}
           <Grid item xs={12} sm={6}>
             <Controller
               name="valor_multa"
@@ -110,14 +190,13 @@ export default function NewPayCheck({
                   helperText={error?.message}
                   required={true}
                   value={value}
-                  onChange={(e) => {
-                    const apenasNumeros = e.target.value.replace(/[^0-9]/g, "");
-                    onChange(apenasNumeros);
-                  }}
+                  onChange={onChange}
                 />
               )}
             />
           </Grid>
+
+          {/* Juros */}
           <Grid item xs={12} sm={6}>
             <Controller
               name="juros"
@@ -132,10 +211,7 @@ export default function NewPayCheck({
                   helperText={error?.message}
                   required={true}
                   value={value}
-                  onChange={(e) => {
-                    const apenasNumeros = e.target.value.replace(/[^0-9]/g, "");
-                    onChange(apenasNumeros);
-                  }}
+                  onChange={onChange}
                 />
               )}
             />
@@ -157,4 +233,6 @@ export default function NewPayCheck({
       </Form>
     </Popup>
   );
-}
+});
+
+export default cadastroPayCheck;

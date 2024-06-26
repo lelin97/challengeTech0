@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
       },
       {
         element: <ListPayCheck />,
-        path: "/autenticado/boletos",
+        path: "/boletos",
       },
     ],
   },
