@@ -1,30 +1,33 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Readme: Mockup Front-End de CRUD de Boleto
+Descrição:
 
-Currently, two official plugins are available:
+Este repositório contém um mockup de interface de usuário (front-end) para um sistema de CRUD (Criar, Ler, Atualizar e Excluir) de boletos. 
+Tecnologias utilizadas: React.js zustand MUI Zod
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Funcionalidades:
+Listagem de boletos:
+Exibe uma lista com todos os boletos cadastrados.
+Possui um botão para criar um novo boleto.
+Criação de boleto:
+Permite cadastrar um novo boleto, informando data de vencimento, valor, etc.
+Visualização de boleto:
+Exibe todas as informações de um boleto selecionado.
+Possui botões para editar ou excluir o boleto.
+Edição de boleto:
+Permite editar as informações de um boleto selecionado.
 
-## Expanding the ESLint configuration
+Tecnologias utilizadas:
+React.js
+Zustand
+Zod
+MUI
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Como usar:
 
-- Configure the top-level `parserOptions` property like this:
+Clone este repositório para o seu computador.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+Execute o comando `yarn`
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Execute o comando `yarn dev`
+Utilize as funcionalidades disponíveis para testar o mockup.
