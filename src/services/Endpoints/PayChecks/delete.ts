@@ -2,7 +2,7 @@ import { RetornoDB } from "../../../types";
 import { api } from "../../api";
 
 export default async function deletePayCheckEndpoint(config: {
-  id_boleto: number;
+  id_boleto: string;
   funcSucesso?: (data: RetornoDB) => void;
   funcErro?: (msg: string, erro: string) => void;
 }) {

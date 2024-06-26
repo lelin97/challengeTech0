@@ -1,9 +1,16 @@
 import { RetornoDB } from "../../../types";
 import { api } from "../../api";
 
+type requestBody = {
+  descricao: string;
+  dt_venc: string;
+  valor: number;
+  valor_multa: number;
+  juros: number;
+};
 
 export default async function registerPayCheckEndpoint(config: {
-  body: Body;
+  body: requestBody;
   funcSucess?: (resultado: RetornoDB) => void;
   funcError?: (msg: string, error: string) => void;
 }) {

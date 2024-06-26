@@ -19,4 +19,16 @@ export default async function listPayCheckEndpoint(config: {
 
 export type RetornoPayCheck = {
   descricao: string;
+  data_vencimento: string;
+  dt_atualizacao: string;
+  dt_baixa: string;
+  dt_cadastro: string;
+  id_boleto: string;
+  juros: number;
+  status_baixa: boolean;
+  usuario_atualizacao: string;
+  usuario_cadastro: string;
+  valor: number;
+  valor_multa: number;
+  valor_total: number;
 }[];
