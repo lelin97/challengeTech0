@@ -5,11 +5,10 @@ export const axiosInstance = async (): Promise<AxiosInstance> => {
     baseURL: `${import.meta.env.VITE_HOST}`,
     responseType: "json",
     headers: {
-      Authorization: `Bearer ${12345}`,
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
     },
   });
 

@@ -52,6 +52,7 @@ async function post<T extends any = any>(
   setLoading(true);
   const instance = await axiosInstance();
   const resultado = await instance
+
     .post<RetornoDB>(url, data, reqConfig?.axiosConfig)
     .then((response) => {
       return response.data;
