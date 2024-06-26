@@ -2,12 +2,12 @@ import { RetornoDB } from "../../../types";
 import { api } from "../../api";
 
 export default async function deletePayCheckEndpoint(config: {
-  codPayCheck: number;
+  id_boleto: number;
   funcSucesso?: (data: RetornoDB) => void;
   funcErro?: (msg: string, erro: string) => void;
 }) {
   const resultado = await api.delete<null>(
-    `/boletos/delete/${config.codPayCheck}`
+    `/boletos/deletar-boleto/${config.id_boleto}`
   );
 
   if (resultado.sucesso === false && config?.funcErro) {

@@ -4,7 +4,7 @@ export default async function listPayCheckEndpoint(config: {
   funcSucesso?: (data: RetornoPayCheck) => void;
   funcErro?: (msg: string, erro: string) => void;
 }) {
-  const resultado = await api.get<RetornoPayCheck>("/boletos/list");
+  const resultado = await api.get<RetornoPayCheck>("/boletos/listar-boleto");
 
   if (resultado.sucesso === false && config?.funcErro) {
     config.funcErro(resultado.mensagem, resultado.erro);
@@ -18,5 +18,5 @@ export default async function listPayCheckEndpoint(config: {
 }
 
 export type RetornoPayCheck = {
-  DESCRICAO: string;
+  descricao: string;
 }[];
