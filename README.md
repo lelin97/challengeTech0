@@ -1,9 +1,13 @@
 
 Readme: Mockup Front-End de CRUD de Boleto
-Descrição:
 
 Este repositório contém um mockup de interface de usuário (front-end) para um sistema de CRUD (Criar, Ler, Atualizar e Excluir) de boletos. 
-Tecnologias utilizadas: React.js zustand MUI Zod
+Tecnologias utilizadas: 
+
+`React.js` 
+`zustand` 
+`MUI` 
+`Zod`
 
 Funcionalidades:
 Listagem de boletos:
