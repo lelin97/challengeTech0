@@ -11,9 +11,11 @@ import { DatePicker } from "@mui/x-date-pickers";
 import registerPayCheckEndpoint from "../../../services/Endpoints/PayChecks/register";
 import { usarAlerta } from "../../../shared/contexts/usarAlerta";
 import { forwardRef, useImperativeHandle } from "react";
+import { editPayCheckEndpoint } from "../../../services/Endpoints/PayChecks/update";
+import { subMonths } from "date-fns";
 
 const defaultValues: DefaultPayCheckInput = {
-  id_boleto: "",
+  id_boleto: null,
   descricao: "",
   dt_venc: new Date(),
   valor: "",
@@ -42,18 +44,17 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
   ref: React.ForwardedRef<RefNewPayCheck>
 ) {
   const { abrirAlertaSucesso } = usarAlerta();
-  const { control, reset } = useForm({
+  const { control, reset, getValues } = useForm({
     mode: "onChange",
     defaultValues: defaultValues,
     resolver: zodResolver(validationRegisterPayCheck),
   });
 
-  const edicao = !!defaultValues.id_boleto;
-
-  console.log(edicao);
+  const edicao = !!getValues().id_boleto;
 
   function clearFields() {
     reset({
+      id_boleto: null,
       descricao: "",
       dt_venc: new Date(),
       valor: "",
@@ -63,14 +64,30 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
   }
 
   async function createPayCheck(data: any) {
+    if (edicao) {
+      editPayCheckEndpoint({
+        bodyRequest: data,
+        funcSucesso: (resultado) => {
+          clearFields();
+          props.closed();
+          abrirAlertaSucesso(
+            resultado.mensagem ?? "Boleto editado com sucesso."
+          );
+          props.listAllPayChecks();
+        },
+      });
+      return;
+    }
+
     registerPayCheckEndpoint({
       body: data,
       funcSucess: (resultado) => {
         clearFields();
         props.closed();
-        abrirAlertaSucesso("Boleto cadastrado com sucesso.");
+        abrirAlertaSucesso(
+          resultado.mensagem ?? "Boleto cadastrado com sucesso."
+        );
         props.listAllPayChecks();
-        console.log("Deu sucesso.", resultado);
       },
     });
   }
@@ -89,9 +106,9 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
           id_boleto: dadosPayCheck.id_boleto,
           descricao: dadosPayCheck.descricao,
           dt_venc: dadosPayCheck.dt_venc,
-          valor: dadosPayCheck.valor,
-          valor_multa: dadosPayCheck.valor_multa,
-          juros: dadosPayCheck.juros,
+          valor: String(dadosPayCheck.valor),
+          valor_multa: String(dadosPayCheck.valor_multa),
+          juros: String(dadosPayCheck.juros),
         });
       },
     };
@@ -104,7 +121,7 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
         props.closed();
         clearFields();
       }}
-      title="New Pay Check"
+      title={edicao ? "Edit Pay Check" : "New Pay Check"}
       maxWidth={"md"}
     >
       <Form<DefaultPayCheckInput, DefaultPayCheckOutput>
@@ -147,8 +164,8 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
                   }}
                   value={value}
                   onChange={onChange}
-                  minDate={new Date()}
-                  label={`Data Emissão`}
+                  minDate={subMonths(new Date(), 1)}
+                  label={`Data Vencimento`}
                 />
               )}
             />

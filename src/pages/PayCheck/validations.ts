@@ -30,7 +30,6 @@ export const validationRegisterPayCheck = z.object({
         message: "Valor inválido. Exemplo: R$250,00",
       }),
     })
-    .min(1)
     .pipe(
       z.coerce.number({
         errorMap: () => ({
