@@ -10,6 +10,6 @@ export const menuLateralBotoes: MenuLateralIcones = [
   {
     icone: faUserTie,
     texto: "Boletos",
-    rota: "/autenticado/boletos",
+    rota: "/boletos",
   },
 ];

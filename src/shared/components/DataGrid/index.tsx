@@ -2,7 +2,7 @@ import { AgGridReact, AgGridReactProps } from "ag-grid-react";
 import { Box } from "@mui/material";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import { JSX } from "react";
+import { ForwardedRef, JSX, forwardRef } from "react";
 import { Unpacked } from "../../../types";
 import { useAppThemeContext } from "../../contexts";
 
@@ -11,7 +11,10 @@ interface DataGridProps<T extends any[]> extends AgGridReactProps<Unpacked<T>> {
   toolbar?: (() => JSX.Element)[];
 }
 
-export default function DataGrid<T extends any[]>(props: DataGridProps<T>) {
+function DataGrid<T extends any[]>(
+  props: DataGridProps<T>,
+  ref: ForwardedRef<any>
+) {
   const { themeName } = useAppThemeContext();
 
   return (
@@ -35,6 +38,7 @@ export default function DataGrid<T extends any[]>(props: DataGridProps<T>) {
       ) : null}
       <AgGridReact
         {...props}
+        ref={ref}
         autoSizeStrategy={{
           type: "fitGridWidth",
         }}
@@ -42,3 +46,5 @@ export default function DataGrid<T extends any[]>(props: DataGridProps<T>) {
     </div>
   );
 }
+
+export default forwardRef(DataGrid);
