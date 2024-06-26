@@ -69,7 +69,7 @@ export default function InfoPayCheck({
     <Popup
       open={open}
       onClose={closed}
-      title="Information Pay Check"
+      title="Informações do Boleto"
       maxWidth={"md"}
     >
       {info}

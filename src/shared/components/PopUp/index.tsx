@@ -8,6 +8,7 @@ import {
   DialogActions,
   Typography,
   DialogTitle,
+  IconButton,
 } from "@mui/material";
 
 interface PopupProps extends DialogProps {
@@ -25,12 +26,13 @@ export default function Popup(props: PopupProps) {
           alignItems={"center"}
         >
           <Typography variant="h6"> {props.title}</Typography>
-          <FontAwesomeIcon
+          <IconButton
             onClick={() => {
               props.onClose?.({}, "escapeKeyDown");
             }}
-            icon={faXmark}
-          />
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </IconButton>
         </Box>
       </DialogTitle>
 

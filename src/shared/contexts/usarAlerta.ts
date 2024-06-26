@@ -6,32 +6,32 @@ const inicialAlerta = {
   mensagem: undefined,
 };
 
-type AlertaStore = {
+type StoreAlert = {
   open: boolean;
   severity: "error" | "info" | "success" | "warning" | undefined;
   mensagem: string | undefined;
-  abrirAlertaErro: (msg: string) => void;
-  abrirAlertaSucesso: (msg: string) => void;
-  fecharAlerta: (reason: string) => void;
+  openAlertError: (msg: string) => void;
+  openAlertSucess: (msg: string) => void;
+  closeAlert: (reason: string) => void;
 };
 
-export const usarAlerta = create<AlertaStore>()((set) => ({
+export const usarAlerta = create<StoreAlert>()((set) => ({
   ...inicialAlerta,
-  abrirAlertaErro: (msg) => {
+  openAlertError: (msg) => {
     set({
       open: true,
       severity: "error",
       mensagem: msg,
     });
   },
-  abrirAlertaSucesso: (msg) => {
+  openAlertSucess: (msg) => {
     set({
       open: true,
       severity: "success",
       mensagem: msg,
     });
   },
-  fecharAlerta: (reason) => {
+  closeAlert: (reason) => {
     if (reason === "timeout") {
       set({
         open: false,

@@ -16,9 +16,10 @@ import NewPayCheck from "../new/index";
 import deletePayCheckEndpoint from "../../../services/Endpoints/PayChecks/delete";
 import { usarAlerta } from "../../../shared/contexts/usarAlerta";
 import InfoPayCheck from "../info";
-import { compareAsc, format, isToday, set } from "date-fns";
+import { format } from "date-fns";
 import { baixaPayCheckEndpoint } from "../../../services/Endpoints/PayChecks/baixa";
 import { usarTelaLoad } from "../../../shared/contexts/usarTelaLoad";
+import { currencyParser } from "../../../shared/utils/currensyParser";
 
 export default function ListPayCheck() {
   const [stateList, setStateList] = useState<{
@@ -26,7 +27,7 @@ export default function ListPayCheck() {
     openPopUpInfo: boolean;
     boletosCadastrados: RetornoPayCheck;
     payCheckInfoSelected: any;
-    boletosSelecionados: {
+    payChecksSelecteds: {
       id_boletos: string[];
       usuario_cadastro: string;
     } | null;
@@ -43,10 +44,10 @@ export default function ListPayCheck() {
       valor_total: "",
       dt_baixa: "",
     },
-    boletosSelecionados: null,
+    payChecksSelecteds: null,
   });
 
-  const { abrirAlertaSucesso, abrirAlertaErro } = usarAlerta();
+  const { openAlertSucess, openAlertError } = usarAlerta();
   const { setLoading } = usarTelaLoad();
   const payCheckSelected = useRef<any>(null);
   const refDataGrid = useRef<any>(null);
@@ -70,14 +71,17 @@ export default function ListPayCheck() {
   }
 
   async function baixaBoletos() {
-    if (!stateList.boletosSelecionados) {
+    if (!stateList.payChecksSelecteds) {
       return;
     }
 
     baixaPayCheckEndpoint({
-      idBoletos: stateList.boletosSelecionados.id_boletos,
-      usuario_cadastro: stateList.boletosSelecionados.usuario_cadastro,
-      funcSucesso: () => {
+      idBoletos: stateList.payChecksSelecteds.id_boletos,
+      usuario_cadastro: stateList.payChecksSelecteds.usuario_cadastro,
+      funcSucesso: (resultado) => {
+        openAlertSucess(
+          resultado.mensagem ?? "Baixa do Boleto realizada com sucesso."
+        );
         listAllPayChecks();
         refDataGrid.current.deselectAll();
       },
@@ -88,13 +92,11 @@ export default function ListPayCheck() {
     deletePayCheckEndpoint({
       id_boleto: id_boleto,
       funcSucesso: (resultado) => {
-        abrirAlertaSucesso(
-          resultado.mensagem ?? "Boleto deletado com sucesso."
-        );
+        openAlertSucess(resultado.mensagem ?? "Boleto deletado com sucesso.");
         listAllPayChecks();
       },
       funcErro: (mensagem) => {
-        abrirAlertaErro(mensagem);
+        openAlertError(mensagem);
       },
     });
   }
@@ -119,7 +121,7 @@ export default function ListPayCheck() {
           };
           setStateList((prev) => ({
             ...prev,
-            boletosSelecionados: data,
+            payChecksSelecteds: data,
           }));
         }}
         toolbar={[
@@ -132,7 +134,7 @@ export default function ListPayCheck() {
                   onClick={() => {
                     baixaBoletos();
                   }}
-                  disabled={!stateList.boletosSelecionados?.id_boletos.length}
+                  disabled={!stateList.payChecksSelecteds?.id_boletos.length}
                 >
                   <FontAwesomeIcon icon={faCashRegister} />
                 </IconButton>
@@ -162,12 +164,18 @@ export default function ListPayCheck() {
             },
           },
           {
-            headerName: "R$ Valor",
+            headerName: "Valor",
             field: "valor",
+            valueFormatter: (v) => {
+              return currencyParser(v.data.valor);
+            },
           },
           {
-            headerName: "R$ Valor Multa",
+            headerName: "Valor Multa",
             field: "valor_multa",
+            valueFormatter: (v) => {
+              return currencyParser(v.data.valor_multa);
+            },
           },
           {
             headerName: "Data Vencimento",
@@ -199,7 +207,7 @@ export default function ListPayCheck() {
             },
           },
           {
-            headerName: "actions",
+            headerName: "Ações",
             cellRenderer: (e: any) => {
               const dados = e.data;
               return (

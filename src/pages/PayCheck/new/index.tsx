@@ -1,4 +1,4 @@
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, InputAdornment, TextField } from "@mui/material";
 import Popup from "../../../shared/components/PopUp";
 import {
   DefaultPayCheckInput,
@@ -43,7 +43,7 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
   props: INewCheckProps,
   ref: React.ForwardedRef<RefNewPayCheck>
 ) {
-  const { abrirAlertaSucesso } = usarAlerta();
+  const { openAlertSucess } = usarAlerta();
   const { control, reset, getValues } = useForm({
     mode: "onChange",
     defaultValues: defaultValues,
@@ -70,9 +70,7 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
         funcSucesso: (resultado) => {
           clearFields();
           props.closed();
-          abrirAlertaSucesso(
-            resultado.mensagem ?? "Boleto editado com sucesso."
-          );
+          openAlertSucess(resultado.mensagem ?? "Boleto editado com sucesso.");
           props.listAllPayChecks();
         },
       });
@@ -84,9 +82,7 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
       funcSucess: (resultado) => {
         clearFields();
         props.closed();
-        abrirAlertaSucesso(
-          resultado.mensagem ?? "Boleto cadastrado com sucesso."
-        );
+        openAlertSucess(resultado.mensagem ?? "Boleto cadastrado com sucesso.");
         props.listAllPayChecks();
       },
     });
@@ -121,7 +117,7 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
         props.closed();
         clearFields();
       }}
-      title={edicao ? "Edit Pay Check" : "New Pay Check"}
+      title={edicao ? "Editar Boleto" : "Cadastrar Boleto"}
       maxWidth={"md"}
     >
       <Form<DefaultPayCheckInput, DefaultPayCheckOutput>
@@ -205,7 +201,6 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
                   label="Valor Multa"
                   error={!!error}
                   helperText={error?.message}
-                  required={true}
                   value={value}
                   onChange={onChange}
                 />
@@ -229,6 +224,11 @@ const cadastroPayCheck = forwardRef(function NewPayCheck(
                   required={true}
                   value={value}
                   onChange={onChange}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">%</InputAdornment>
+                    ),
+                  }}
                 />
               )}
             />

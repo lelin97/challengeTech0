@@ -2,9 +2,7 @@ import { Snackbar, Alert } from "@mui/material";
 import { usarAlerta } from "../../contexts/usarAlerta";
 
 export default function AppAlert() {
-  const { open, mensagem, severity, fecharAlerta } = usarAlerta(
-    (state) => state
-  );
+  const { open, mensagem, severity, closeAlert } = usarAlerta((state) => state);
 
   return (
     <Snackbar
@@ -15,7 +13,7 @@ export default function AppAlert() {
         horizontal: "right",
       }}
       onClose={(_, reason) => {
-        fecharAlerta(reason);
+        closeAlert(reason);
       }}
     >
       <Alert severity={severity}>{mensagem}</Alert>
